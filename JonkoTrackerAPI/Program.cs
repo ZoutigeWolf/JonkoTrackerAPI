@@ -74,13 +74,11 @@ public class Program
         
         app.UseCors("Default");
 
-        app.UseHttpsRedirection();
-
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
 
-        app.Run("http://localhost:42069");
+        app.Run();
     }
 }
