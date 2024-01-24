@@ -15,9 +15,6 @@ public class AuthController : Controller<AuthController, AuthHandler>
     {
     }
 
-    [HttpGet]
-    public ActionResult Bim() => new OkObjectResult("Bam");
-
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
