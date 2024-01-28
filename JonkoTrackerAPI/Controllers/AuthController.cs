@@ -20,6 +20,10 @@ public class AuthController : Controller<AuthController, AuthHandler>
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public ActionResult Login(UserCredentials credentials) => Handler.Login(credentials);
 
+    [HttpPost("register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult Login(UserRegistrationData data) => Handler.Register(data);
+
     [HttpGet("current-user")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
