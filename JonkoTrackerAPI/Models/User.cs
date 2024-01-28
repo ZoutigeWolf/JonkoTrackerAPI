@@ -9,4 +9,7 @@ public class User
     public string DisplayName { get; set; }
     [JsonIgnore] public string PasswordHash { get; set; }
     public string Email { get; set; }
+    
+    [JsonIgnore] public List<User> Friends { get; set; }
+    [JsonIgnore] public List<User> FriendsOf { get; set; }
 }

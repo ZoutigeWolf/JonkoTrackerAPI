@@ -49,6 +49,36 @@ namespace JonkoTrackerAPI.Migrations
 
                     b.ToTable("Users");
                 });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.Property<int>("FriendsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FriendsOfId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("FriendsId", "FriendsOfId");
+
+                    b.HasIndex("FriendsOfId");
+
+                    b.ToTable("Friends", (string)null);
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.HasOne("JonkoTrackerAPI.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("FriendsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JonkoTrackerAPI.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("FriendsOfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 #pragma warning restore 612, 618
         }
     }

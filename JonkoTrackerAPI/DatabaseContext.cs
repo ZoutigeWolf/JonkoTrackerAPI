@@ -14,6 +14,9 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        
+        builder.Entity<User>()
+            .HasMany(u => u.Friends)
+            .WithMany(u => u.FriendsOf)
+            .UsingEntity(join => join.ToTable("Friends"));
     }
 }
