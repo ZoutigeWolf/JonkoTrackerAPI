@@ -32,6 +32,8 @@ public class StorageService : Service
 
         try
         {
+            Console.WriteLine(bucket);
+            Console.WriteLine(objectName);
             await _minio.GetObjectAsync(
                 new GetObjectArgs()
                     .WithBucket(bucket)
