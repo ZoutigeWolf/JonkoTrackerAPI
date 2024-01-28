@@ -39,11 +39,11 @@ public class UserHandler : Handler
             return new NotFoundResult();
         }
 
-        Stream stream = await Services.Storage.Get(Configuration["Storage:Buckets:ProfilePictures"], id.ToString());
+        Stream stream = await Services.Storage.Get(Configuration["Storage:Buckets:ProfilePictures"], $"{id.ToString()}.png");
 
         if (stream == null)
         {
-            stream = await Services.Storage.Get(Configuration["Storage:Buckets:ProfilePictures"], "default");
+            stream = await Services.Storage.Get(Configuration["Storage:Buckets:ProfilePictures"], "default.png");
         }
 
         if (stream == null)
