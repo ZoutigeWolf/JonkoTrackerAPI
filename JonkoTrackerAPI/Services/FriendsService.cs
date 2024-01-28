@@ -19,13 +19,17 @@ public class FriendsService : Service
     public void AddFriend(User user, User friend)
     {
         Services.LoadCollection(user, u => u.Friends);
+        Services.LoadCollection(friend, u => u.Friends);
 
-        if (user.Friends.Contains(friend))
+        if (!user.Friends.Contains(friend))
         {
-            return;
+            user.Friends.Add(friend);
         }
         
-        user.Friends.Add(friend);
+        if (!friend.Friends.Contains(user))
+        {
+            friend.Friends.Add(user);
+        }
 
         Context.SaveChanges();
     }
@@ -33,13 +37,17 @@ public class FriendsService : Service
     public void RemoveFriend(User user, User friend)
     {
         Services.LoadCollection(user, u => u.Friends);
+        Services.LoadCollection(friend, u => u.Friends);
 
-        if (!user.Friends.Contains(friend))
+        if (user.Friends.Contains(friend))
         {
-            return;
+            user.Friends.Remove(friend);
         }
         
-        user.Friends.Remove(friend);
+        if (friend.Friends.Contains(user))
+        {
+            friend.Friends.Remove(user);
+        }
 
         Context.SaveChanges();
     }
