@@ -23,6 +23,12 @@ public class UserController : Controller<UserController, UserHandler>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<User> GetUser(int id) => Handler.GetUser(id);
+    
+    [HttpGet("{id:int}/meta-data")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<UserMetaData> GetMetaData(int id) => Handler.GetMetaData(GetUserFromClaims(), id);
 
     [HttpGet("{id:int}/profile-picture")]
     [ProducesResponseType(StatusCodes.Status200OK)]

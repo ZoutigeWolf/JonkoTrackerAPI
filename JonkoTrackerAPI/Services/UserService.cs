@@ -1,4 +1,5 @@
 using JonkoTrackerAPI.Models;
+using JonkoTrackerAPI.Types;
 
 namespace JonkoTrackerAPI.Services;
 
@@ -60,5 +61,17 @@ public class UserService : Service
         Context.SaveChanges();
 
         return user;
+    }
+
+    public UserMetaData GetMetaData(User user, User other)
+    {
+        Services.LoadCollection(user, u => u.Friends);
+
+        bool isFriend = user.Friends.Contains(other);
+        
+        return new UserMetaData()
+        {
+            IsFriend = isFriend,
+        };
     }
 }

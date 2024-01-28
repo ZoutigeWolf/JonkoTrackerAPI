@@ -32,6 +32,25 @@ public class UserHandler : Handler
         return new OkObjectResult(user);
     }
 
+    public ActionResult<UserMetaData> GetMetaData(User? user, int id)
+    {
+        if (user == null)
+        {
+            return new UnauthorizedResult();
+        }
+
+        User? other = Services.Users.GetById(id);
+
+        if (other == null)
+        {
+            return new NotFoundResult();
+        }
+
+        UserMetaData data = Services.Users.GetMetaData(user, other);
+
+        return new OkObjectResult(data);
+    }
+
     public async Task<ActionResult> GetProfilePicture(int id)
     {
         if (Services.Users.GetById(id) == null)
