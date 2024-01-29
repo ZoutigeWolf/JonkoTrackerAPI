@@ -7,8 +7,8 @@ namespace JonkoTrackerAPI.Handlers;
 
 public class AuthHandler : Handler
 {
-    public static Regex PasswordRegex =
-        new Regex(@"/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,32}$/");
+    public static readonly Regex PasswordRegex =
+        new Regex(@"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,32}$");
     
     public AuthHandler(ILogger logger, DatabaseContext context, IConfiguration configuration) 
         : base(logger, context, configuration)
