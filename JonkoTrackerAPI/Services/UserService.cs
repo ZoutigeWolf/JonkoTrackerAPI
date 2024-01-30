@@ -1,3 +1,4 @@
+using JonkoTrackerAPI.Handlers;
 using JonkoTrackerAPI.Models;
 using JonkoTrackerAPI.Types;
 
@@ -63,6 +64,49 @@ public class UserService : Service
         return user;
     }
 
+    public bool Update(User user, UserRegistrationData data)
+    {
+        if (IsUsernameAvailable(user, data.Username))
+        {
+            user.Username = data.Username;
+        }
+        else
+        {
+            return false;
+        }
+
+        if (data.DisplayName.Length > 0)
+        {
+            user.DisplayName = data.DisplayName;
+        }
+        else
+        {
+            return false;
+        }
+
+        if (IsEmailAvailable(user, data.Email))
+        {
+            user.Email = data.Email;
+        }
+        else
+        {
+            return false;
+        }
+        
+        if (AuthHandler.PasswordRegex.IsMatch(data.Password))
+        {
+            user.PasswordHash = AuthService.HashPassword(data.Password);
+        }
+        else
+        {
+            return false;
+        }
+
+        Context.SaveChanges();
+
+        return true;
+    }
+
     public UserMetaData GetMetaData(User user, User other)
     {
         Services.LoadCollection(user, u => u.Friends);
@@ -73,5 +117,19 @@ public class UserService : Service
         {
             IsFriend = isFriend,
         };
+    }
+    
+    private bool IsUsernameAvailable(User user, string username)
+    {
+        User? existingUser = Services.Users.GetByUsername(username);
+
+        return existingUser == null || existingUser.Id == user.Id;
+    }
+    
+    private bool IsEmailAvailable(User user, string email)
+    {
+        User? existingUser = Services.Users.GetByEmail(email);
+
+        return existingUser == null || existingUser.Id == user.Id;
     }
 }

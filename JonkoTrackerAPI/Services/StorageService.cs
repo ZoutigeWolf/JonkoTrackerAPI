@@ -32,8 +32,6 @@ public class StorageService : Service
 
         try
         {
-            Console.WriteLine(bucket);
-            Console.WriteLine(objectName);
             await _minio.GetObjectAsync(
                 new GetObjectArgs()
                     .WithBucket(bucket)
@@ -48,5 +46,13 @@ public class StorageService : Service
             Console.WriteLine(e);
             return null;
         }
+    }
+
+    public async Task Delete(string bucket, string objectName)
+    {
+        await _minio.RemoveObjectAsync(
+            new RemoveObjectArgs()
+                .WithBucket(bucket)
+                .WithObject(objectName));
     }
 }

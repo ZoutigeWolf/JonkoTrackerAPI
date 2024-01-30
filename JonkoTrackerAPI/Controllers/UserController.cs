@@ -23,6 +23,10 @@ public class UserController : Controller<UserController, UserHandler>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<User> GetUser(int id) => Handler.GetUser(id);
+
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public ActionResult UpdateUser(int id, UserRegistrationData data) => Handler.UpdateUser(GetUserFromClaims(), id, data);
     
     [HttpGet("{id:int}/meta-data")]
     [Authorize]

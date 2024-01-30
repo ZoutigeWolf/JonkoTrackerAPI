@@ -1,15 +1,20 @@
 using System.Text.RegularExpressions;
 using JonkoTrackerAPI.Models;
+using JonkoTrackerAPI.Services;
 using JonkoTrackerAPI.Types;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Protocols.Configuration;
 
 namespace JonkoTrackerAPI.Handlers;
 
 public class UserHandler : Handler
 {
+    private readonly string _bucket;
+    
     public UserHandler(ILogger logger, DatabaseContext context, IConfiguration configuration) 
         : base(logger, context, configuration)
     {
+        this._bucket = Configuration["Storage:Buckets:ProfilePictures"] ?? throw new InvalidConfigurationException();
     }
 
     public ActionResult<IEnumerable<User>> GetAllUsers()
@@ -30,6 +35,23 @@ public class UserHandler : Handler
         }
 
         return new OkObjectResult(user);
+    }
+
+    public ActionResult UpdateUser(User? user, int id, UserRegistrationData data)
+    {
+        if (user == null)
+        {
+            return new UnauthorizedResult();
+        }
+
+        if (user.Id != id)
+        {
+            return new ForbidResult();
+        }
+
+        bool res = Services.Users.Update(user, data);
+
+        return res ? new OkResult() : new BadRequestResult();
     }
 
     public ActionResult<UserMetaData> GetMetaData(User? user, int id)
@@ -58,12 +80,8 @@ public class UserHandler : Handler
             return new NotFoundResult();
         }
 
-        Stream stream = await Services.Storage.Get(Configuration["Storage:Buckets:ProfilePictures"], $"{id.ToString()}.png");
-
-        if (stream == null)
-        {
-            stream = await Services.Storage.Get(Configuration["Storage:Buckets:ProfilePictures"], "default.png");
-        }
+        Stream? stream = await Services.Storage.Get(_bucket, $"{id.ToString()}.png") ??
+                         await Services.Storage.Get(_bucket, "default.png");
 
         if (stream == null)
         {
@@ -85,8 +103,13 @@ public class UserHandler : Handler
             return new BadRequestResult();
         }
 
+        if (await Services.Storage.Get(_bucket, $"{id.ToString()}.png") != null)
+        {
+            await Services.Storage.Delete(_bucket, $"{id.ToString()}.png");
+        }
+
         await using Stream stream = file.OpenReadStream();
-        await Services.Storage.Upload(Configuration["Storage:Buckets:ProfilePictures"], id.ToString(), stream);
+        await Services.Storage.Upload(_bucket, id.ToString(), stream);
 
         return new OkResult();
     }
