@@ -64,47 +64,29 @@ public class UserService : Service
         return user;
     }
 
-    public bool Update(User user, UserRegistrationData data)
+    public void Update(User user, UserRegistrationData data)
     {
         if (IsUsernameAvailable(user, data.Username))
         {
             user.Username = data.Username;
-        }
-        else
-        {
-            return false;
         }
 
         if (data.DisplayName.Length > 0)
         {
             user.DisplayName = data.DisplayName;
         }
-        else
-        {
-            return false;
-        }
 
         if (IsEmailAvailable(user, data.Email))
         {
             user.Email = data.Email;
-        }
-        else
-        {
-            return false;
         }
         
         if (AuthHandler.PasswordRegex.IsMatch(data.Password))
         {
             user.PasswordHash = AuthService.HashPassword(data.Password);
         }
-        else
-        {
-            return false;
-        }
 
         Context.SaveChanges();
-
-        return true;
     }
 
     public UserMetaData GetMetaData(User user, User other)

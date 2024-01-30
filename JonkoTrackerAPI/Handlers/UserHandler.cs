@@ -49,9 +49,9 @@ public class UserHandler : Handler
             return new ForbidResult();
         }
 
-        bool res = Services.Users.Update(user, data);
+        Services.Users.Update(user, data);
 
-        return res ? new OkResult() : new BadRequestResult();
+        return new OkResult();
     }
 
     public ActionResult<UserMetaData> GetMetaData(User? user, int id)
