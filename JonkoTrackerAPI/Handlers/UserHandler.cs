@@ -108,7 +108,7 @@ public class UserHandler : Handler
             await Services.Storage.Delete(_bucket, $"{id.ToString()}.png");
         }
 
-        using Stream stream = file.OpenReadStream();
+        await using Stream stream = file.OpenReadStream();
         await Services.Storage.Upload(_bucket, $"{id.ToString()}.png", stream);
 
         return new OkResult();
