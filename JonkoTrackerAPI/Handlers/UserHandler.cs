@@ -91,14 +91,14 @@ public class UserHandler : Handler
         return new FileStreamResult(stream, "application/octet-stream");
     }
 
-    public async Task<ActionResult> UploadProfilePicture(int id, IFormFile file)
+    public async Task<ActionResult> UploadProfilePicture(int id, MultipartFormDataContent form)
     {
         if (Services.Users.GetById(id) == null)
         {
             return new NotFoundResult();
         }
         
-        if (file.Length == 0)
+        if (!form.Any())
         {
             return new BadRequestResult();
         }
@@ -108,7 +108,7 @@ public class UserHandler : Handler
             await Services.Storage.Delete(_bucket, $"{id.ToString()}.png");
         }
 
-        await using Stream stream = file.OpenReadStream();
+        await using Stream stream = await form.ReadAsStreamAsync();
         await Services.Storage.Upload(_bucket, $"{id.ToString()}.png", stream);
 
         return new OkResult();
