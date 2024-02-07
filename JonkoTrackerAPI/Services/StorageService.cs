@@ -15,14 +15,14 @@ public class StorageService : Service
             .Build();
     }
 
-    public async Task Upload(string bucket, string objectName, Stream stream)
+    public async Task Upload(string bucket, string objectName, Stream stream, int size)
     {
         await _minio.PutObjectAsync(
             new PutObjectArgs()
                 .WithBucket(bucket)
                 .WithObject(objectName)
                 .WithStreamData(stream)
-                // .WithObjectSize(stream.Length)
+                .WithObjectSize(size)
                 .WithContentType("application/octet-stream")).ConfigureAwait(false);
     }
 

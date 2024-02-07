@@ -91,7 +91,7 @@ public class UserHandler : Handler
         return new FileStreamResult(stream, "application/octet-stream");
     }
 
-    public async Task<ActionResult> UploadProfilePicture(int id, Stream stream)
+    public async Task<ActionResult> UploadProfilePicture(int id, int size, Stream stream)
     {
         if (Services.Users.GetById(id) == null)
         {
@@ -103,7 +103,7 @@ public class UserHandler : Handler
             await Services.Storage.Delete(_bucket, $"{id.ToString()}.png");
         }
         
-        await Services.Storage.Upload(_bucket, $"{id.ToString()}.png", stream);
+        await Services.Storage.Upload(_bucket, $"{id.ToString()}.png", stream, size);
         await stream.DisposeAsync();
 
         return new OkResult();
