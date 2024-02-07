@@ -22,7 +22,7 @@ public class StorageService : Service
                 .WithBucket(bucket)
                 .WithObject(objectName)
                 .WithStreamData(stream)
-                .WithObjectSize(stream.Length)
+                // .WithObjectSize(stream.Length)
                 .WithContentType("application/octet-stream")).ConfigureAwait(false);
     }
 
