@@ -33,7 +33,8 @@ public class Program
         });
         
         builder.Services.AddDbContextPool<DatabaseContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString(builder.Configuration["SelectedConnection"])));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(builder.Configuration["SelectedConnection"])).
+                UseLoggerFactory(LoggerFactory.Create(b => b.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.None))));
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
