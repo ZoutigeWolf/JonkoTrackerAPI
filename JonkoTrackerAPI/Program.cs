@@ -64,13 +64,17 @@ public class Program
             });
         });
 
+
+        builder.Services.AddLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        });
+
         WebApplication app = builder.Build();
         
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
         
         app.UseCors("Default");
 
