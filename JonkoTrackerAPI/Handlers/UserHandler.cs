@@ -98,11 +98,6 @@ public class UserHandler : Handler
             return new NotFoundResult();
         }
         
-        if (file.Length == 0)
-        {
-            return new BadRequestResult();
-        }
-
         if (await Services.Storage.Get(_bucket, $"{id.ToString()}.png") != null)
         {
             await Services.Storage.Delete(_bucket, $"{id.ToString()}.png");
