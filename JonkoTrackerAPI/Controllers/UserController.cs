@@ -43,5 +43,5 @@ public class UserController : Controller<UserController, UserHandler>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> UploadProfilePicture(int id, [FromBody] Stream stream) => await Handler.UploadProfilePicture(id, stream);
+    public async Task<ActionResult> UploadProfilePicture(int id, [FromForm] IFormFile file) => await Handler.UploadProfilePicture(id, file);
 }

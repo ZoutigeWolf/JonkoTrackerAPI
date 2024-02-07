@@ -91,7 +91,7 @@ public class UserHandler : Handler
         return new FileStreamResult(stream, "application/octet-stream");
     }
 
-    public async Task<ActionResult> UploadProfilePicture(int id, Stream stream)
+    public async Task<ActionResult> UploadProfilePicture(int id, IFormFile file)
     {
         if (Services.Users.GetById(id) == null)
         {
@@ -107,6 +107,8 @@ public class UserHandler : Handler
         {
             await Services.Storage.Delete(_bucket, $"{id.ToString()}.png");
         }
+
+        using Stream stream = file.OpenReadStream();
         await Services.Storage.Upload(_bucket, $"{id.ToString()}.png", stream);
 
         return new OkResult();
