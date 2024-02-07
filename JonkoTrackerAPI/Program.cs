@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -48,8 +49,6 @@ public class Program
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
             });
-
-        builder.Services.AddAuthentication();
         
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
         builder.Services.AddCors(options =>
@@ -63,15 +62,15 @@ public class Program
                     .AllowCredentials();
             });
         });
-
-
-        builder.Services.AddLogging(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddConsole();
-        });
-
+        
         WebApplication app = builder.Build();
+        
+        app.Use(async (context, next) =>
+        {
+            LogRequest(context.Request);
+            
+            await next();
+        });
         
         app.UseSwagger();
         app.UseSwaggerUI();
@@ -84,5 +83,31 @@ public class Program
         app.MapControllers();
 
         app.Run();
+    }
+    
+    private static void LogRequest(HttpRequest request)
+    {
+        Console.WriteLine($"Request Method: {request.Method}");
+        Console.WriteLine($"Path: {request.Path}");
+        Console.WriteLine($"Query String: {request.QueryString}");
+        
+        Console.WriteLine("Headers:");
+        foreach (KeyValuePair<string, StringValues> header in request.Headers)
+        {
+            Console.WriteLine($"{header.Key}: {header.Value}");
+        }
+        
+        if (!request.Body.CanRead)
+        {
+            return;
+        }
+        
+        request.EnableBuffering();
+        using StreamReader reader = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true);
+        string requestBody = reader.ReadToEnd();
+        
+        Console.WriteLine($"Request Body: {requestBody}");
+        
+        request.Body.Seek(0, SeekOrigin.Begin);
     }
 }
