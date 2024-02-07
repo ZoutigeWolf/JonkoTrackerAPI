@@ -98,7 +98,7 @@ public class UserHandler : Handler
             return new NotFoundResult();
         }
         
-        if (stream.Length == 0)
+        if (file.Length == 0)
         {
             return new BadRequestResult();
         }
