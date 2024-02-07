@@ -33,8 +33,7 @@ public class Program
         });
         
         builder.Services.AddDbContextPool<DatabaseContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString(builder.Configuration["SelectedConnection"])).
-                UseLoggerFactory(LoggerFactory.Create(b => b.AddConsole(o => o.LogToStandardErrorThreshold = LogLevel.None))));
+            options.UseNpgsql(builder.Configuration.GetConnectionString(builder.Configuration["SelectedConnection"])));
         
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -66,13 +65,6 @@ public class Program
         
         WebApplication app = builder.Build();
         
-        app.Use(async (context, next) =>
-        {
-            await LogRequest(context.Request);
-            
-            await next();
-        });
-        
         app.UseSwagger();
         app.UseSwaggerUI();
         
@@ -84,31 +76,5 @@ public class Program
         app.MapControllers();
 
         app.Run();
-    }
-    
-    private static async Task LogRequest(HttpRequest request)
-    {
-        Console.WriteLine($"Request Method: {request.Method}");
-        Console.WriteLine($"Path: {request.Path}");
-        Console.WriteLine($"Query String: {request.QueryString}");
-        
-        Console.WriteLine("Headers:");
-        foreach (KeyValuePair<string, StringValues> header in request.Headers)
-        {
-            Console.WriteLine($"{header.Key}: {header.Value}");
-        }
-        
-        if (!request.Body.CanRead)
-        {
-            return;
-        }
-        
-        request.EnableBuffering();
-        using StreamReader reader = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true);
-        string requestBody = await reader.ReadToEndAsync();
-        
-        Console.WriteLine($"Request Body: {requestBody}");
-        
-        request.Body.Seek(0, SeekOrigin.Begin);
     }
 }
