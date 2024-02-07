@@ -68,7 +68,7 @@ public class Program
         
         app.Use(async (context, next) =>
         {
-            LogRequest(context.Request);
+            await LogRequest(context.Request);
             
             await next();
         });
@@ -86,7 +86,7 @@ public class Program
         app.Run();
     }
     
-    private static void LogRequest(HttpRequest request)
+    private static async Task LogRequest(HttpRequest request)
     {
         Console.WriteLine($"Request Method: {request.Method}");
         Console.WriteLine($"Path: {request.Path}");
@@ -105,7 +105,7 @@ public class Program
         
         request.EnableBuffering();
         using StreamReader reader = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true);
-        string requestBody = reader.ReadToEnd();
+        string requestBody = await reader.ReadToEndAsync();
         
         Console.WriteLine($"Request Body: {requestBody}");
         
