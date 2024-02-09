@@ -20,12 +20,46 @@ public class SessionService : Service
             UserId = user.Id,
             Latitude = data.Latitude,
             Longitude = data.Longitude,
-            Jonkos = data.Jonkos
         };
 
         Context.Sessions.Add(session);
         Context.SaveChanges();
 
+        CreateJonkos(session, data.Jonkos);
+
         return session;
+    }
+
+    private void CreateJonkos(Session session, List<Jonko> jonkos)
+    {
+        foreach (Jonko j in jonkos)
+        {
+            Jonko jonko = new Jonko()
+            {
+                Name = j.Name,
+                SessionId = session.Id,
+            };
+
+            Context.Jonkos.Add(jonko);
+            Context.SaveChanges();
+            
+            CreateIngredients(jonko, j.Ingredients);
+        }
+    }
+    
+    private void CreateIngredients(Jonko jonko, List<Ingredient> ingredients)
+    {
+        foreach (Ingredient i in ingredients)
+        {
+            Ingredient ingredient = new Ingredient()
+            {
+                JonkoId = jonko.Id,
+                Strain = i.Strain,
+                Amount = i.Amount,
+            };
+
+            Context.Jonkos.Add(jonko);
+            Context.SaveChanges();
+        }
     }
 }
