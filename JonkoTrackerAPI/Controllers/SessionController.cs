@@ -24,7 +24,7 @@ public class SessionController : Controller<SessionController, SessionHandler>
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Session> GetSession(int id) => Handler.GetSession(id);
 
-    [HttpPost("{id:int}")]
+    [HttpPost]
     [Authorize]
     public ActionResult<Session> CreateSession(SessionCreationData data) =>
         Handler.CreateSession(GetUserFromClaims(), data);
