@@ -38,6 +38,7 @@ public class SessionController : Controller<SessionController, SessionHandler>
     [HttpPost("{id:int}/pictures/{n:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [RequestSizeLimit(8_388_608)]
     public async Task<ActionResult> UploadSessionPictures(int id, int n, int size) =>
         await Handler.UploadPicture(GetUserFromClaims(), id, n, size, Request.BodyReader.AsStream());
 
@@ -54,6 +55,7 @@ public class SessionController : Controller<SessionController, SessionHandler>
     [HttpPost("{id:int}/jonkos/{jonkoId:int}/picture")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [RequestSizeLimit(8_388_608)]
     public async Task<ActionResult> UploadSessionJonkoPicture(int id, int jonkoId, int size) =>
         await Handler.UploadJonkoPicture(GetUserFromClaims(), id, jonkoId, size, Request.BodyReader.AsStream());
 }

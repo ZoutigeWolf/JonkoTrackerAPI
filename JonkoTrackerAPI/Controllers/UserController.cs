@@ -43,6 +43,7 @@ public class UserController : Controller<UserController, UserHandler>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [RequestSizeLimit(8_388_608)]
     public async Task<ActionResult> UploadProfilePicture(int id, int size) => await Handler.UploadProfilePicture(id, size, Request.BodyReader.AsStream());
 
     [HttpGet("{id:int}/sessions")]
