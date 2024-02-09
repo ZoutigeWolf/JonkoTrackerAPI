@@ -51,7 +51,7 @@ public class SessionController : Controller<SessionController, SessionHandler>
     public async Task<ActionResult> GetSessionJonkoPicture(int id, int jonkoId) =>
         await Handler.GetJonkoPicture(GetUserFromClaims(), id, jonkoId);
 
-    [HttpGet("{id:int}/jonkos/{jonkoId:int}/picture")]
+    [HttpPost("{id:int}/jonkos/{jonkoId:int}/picture")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> UploadSessionJonkoPicture(int id, int jonkoId, int size) =>
