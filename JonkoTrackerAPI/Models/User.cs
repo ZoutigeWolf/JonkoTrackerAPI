@@ -12,4 +12,6 @@ public class User
     
     [JsonIgnore] public List<User> Friends { get; set; }
     [JsonIgnore] public List<User> FriendsOf { get; set; }
+    
+    [JsonIgnore] public List<Session> Sessions { get; set; }
 }

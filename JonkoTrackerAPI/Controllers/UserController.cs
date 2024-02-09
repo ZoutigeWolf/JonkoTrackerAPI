@@ -44,4 +44,8 @@ public class UserController : Controller<UserController, UserHandler>
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UploadProfilePicture(int id, int size) => await Handler.UploadProfilePicture(id, size, Request.BodyReader.AsStream());
+
+    [HttpGet("{id:int}/sessions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<IEnumerable<Session>> GetAllSessions(int id) => base.Handler.GetAllSessions(id);
 }

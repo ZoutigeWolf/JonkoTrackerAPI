@@ -14,6 +14,8 @@ public class ServicesList
     public readonly AuthService Auth;
     public readonly StorageService Storage;
     public readonly FriendsService Friends;
+    public readonly SessionService Sessions;
+    
     
     public ServicesList(DatabaseContext context, IConfiguration configuration)
     {
@@ -24,6 +26,7 @@ public class ServicesList
         Auth = new AuthService(context, configuration, this);
         Storage = new StorageService(context, configuration, this);
         Friends = new FriendsService(context, configuration, this);
+        Sessions = new SessionService(context, configuration, this);
     }
 
     public void DetachEntity<TEntity>(TEntity entity) where TEntity : notnull

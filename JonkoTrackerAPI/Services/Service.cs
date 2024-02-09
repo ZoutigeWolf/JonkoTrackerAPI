@@ -1,6 +1,3 @@
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-
 namespace JonkoTrackerAPI.Services;
 
 public abstract class Service

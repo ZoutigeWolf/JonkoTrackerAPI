@@ -108,4 +108,12 @@ public class UserHandler : Handler
 
         return new OkResult();
     }
+
+    public ActionResult<IEnumerable<Session>> GetAllSessions(int userId)
+    {
+        IEnumerable<Session> sessions = Services.Sessions.GetAll()
+            .Where(s => s.UserId == userId);
+        
+        return new OkObjectResult(sessions);
+    }
 }
