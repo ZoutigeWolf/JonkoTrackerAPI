@@ -3,7 +3,6 @@ using JonkoTrackerAPI.Models;
 using JonkoTrackerAPI.Types;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace JonkoTrackerAPI.Controllers;
 
@@ -27,7 +26,7 @@ public class SessionController : Controller<SessionController, SessionHandler>
 
     [HttpPost]
     [Authorize]
-    public ActionResult<Session> CreateSession([FromBody] SessionCreationData data) =>
+    public ActionResult<Session> CreateSession(SessionCreationData data) =>
         Handler.CreateSession(GetUserFromClaims(), data);
 
     [HttpGet("{id:int}/pictures/{n:int}")]

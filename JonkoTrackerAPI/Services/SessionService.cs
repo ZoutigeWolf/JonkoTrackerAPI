@@ -58,7 +58,7 @@ public class SessionService : Service
                 Amount = i.Amount,
             };
 
-            Context.Jonkos.Add(jonko);
+            Context.Ingredients.Add(ingredient);
             Context.SaveChanges();
         }
     }
